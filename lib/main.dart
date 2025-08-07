@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:practice_api/view/bottom_navigation_bar/bottom_navigation_screen.dart';
+import 'package:practice_api/view/bottom_navigation_bar/auth_profile.dart';
+import 'package:practice_api/view/intro_screen/signIn_screen.dart';
 import 'package:practice_api/view/intro_screen/signUp_screen.dart';
 import 'package:practice_api/view/intro_screen/splash_screen.dart';
 import 'package:practice_api/viewModel/api_provider.dart';
+import 'package:practice_api/viewModel/auth_provider.dart';
 import 'package:practice_api/viewModel/enterainment_api_provider.dart';
 import 'package:practice_api/viewModel/news_api_provider.dart';
 import 'package:provider/provider.dart';
@@ -13,9 +15,10 @@ void main() {
     ChangeNotifierProvider(create: (_) => ApiProvider()),
     ChangeNotifierProvider(create: (_) => EntertainmentApiprovider()),
     ChangeNotifierProvider(create: (_) => NewsApiProvider()),
+    ChangeNotifierProvider(create: (_) => AuthProvider()),
 
   ],
-  child: MyApp()));
+      child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -24,13 +27,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home:BottomNavigationScreen() ,
-    );
+        debugShowCheckedModeBanner: false,
+        home: SplashScreen(),
+        );
+
   }
 }
 
