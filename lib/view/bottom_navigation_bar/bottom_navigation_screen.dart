@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:practice_api/view/bottom_navigation_bar/home_screen.dart';
-import 'package:practice_api/view/bottom_navigation_bar/profile_screen.dart';
-import 'package:practice_api/view/bottom_navigation_bar/setting_screen.dart';
-import 'package:practice_api/view/bottom_navigation_bar/store_screen.dart';
+import 'home_screen.dart';
+import 'store_screen.dart';
+import 'setting_screen.dart';
+import 'profile_screen.dart';
+import 'auth_profile.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -14,11 +15,12 @@ class BottomNavigationScreen extends StatefulWidget {
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   int selectedIndex = 0;
 
-  final List<Widget> pageList = [
+  final List<Widget> pageList = const [
     HomeScreen(),
     StoreScreen(),
     SettingScreen(),
     ProfileScreen(),
+    Authprofile(),
   ];
 
   final List<String> pageTitles = [
@@ -26,7 +28,14 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     "Store",
     "Settings",
     "Profile",
+    "Auth Profile",
   ];
+
+  void _onMenuSelect(int index) {
+    setState(() {
+      selectedIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,49 +47,48 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
         title: Text(pageTitles[selectedIndex]),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {
-
-          }, icon: const Icon(Icons.notification_add)),
-          PopupMenuButton(
+          IconButton(
+            onPressed: () {
+              // Notification action
+            },
+            icon: const Icon(Icons.notifications),
+          ),
+          PopupMenuButton<int>(
+            onSelected: _onMenuSelect,
             itemBuilder: (context) => [
-              PopupMenuItem(
+              const PopupMenuItem(
+                value: 0,
                 child: ListTile(
-                  leading: const Icon(Icons.home),
-                  title: const Text('Home'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    setState(() => selectedIndex = 0);
-                  },
+                  leading: Icon(Icons.home),
+                  title: Text('Home'),
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
+                value: 1,
                 child: ListTile(
-                  leading: const Icon(Icons.store),
-                  title: const Text('Store'),
-                  onTap: () {
-                    Navigator.pop(context);
-                    setState(() => selectedIndex = 1);
-                  },
+                  leading: Icon(Icons.store),
+                  title: Text('Store'),
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
+                value: 2,
                 child: ListTile(
-                  leading: const Icon(Icons.settings),
-                  title: const Text("Settings"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    setState(() => selectedIndex = 2);
-                  },
+                  leading: Icon(Icons.settings),
+                  title: Text("Settings"),
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
+                value: 3,
                 child: ListTile(
-                  leading: const Icon(Icons.person),
-                  title: const Text("Profile"),
-                  onTap: () {
-                    Navigator.pop(context);
-                    setState(() => selectedIndex = 3);
-                  },
+                  leading: Icon(Icons.person),
+                  title: Text("Profile"),
+                ),
+              ),
+              const PopupMenuItem(
+                value: 4,
+                child: ListTile(
+                  leading: Icon(Icons.verified_user),
+                  title: Text("Auth Profile"),
                 ),
               ),
             ],
@@ -104,6 +112,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
           BottomNavigationBarItem(icon: Icon(Icons.store), label: "Store"),
           BottomNavigationBarItem(icon: Icon(Icons.settings), label: "Settings"),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: "Profile"),
+          BottomNavigationBarItem(icon: Icon(Icons.verified_user), label: "Auth"),
         ],
       ),
     );

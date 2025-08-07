@@ -1,100 +1,118 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:practice_api/view/intro_screen/signUp_screen.dart';
+import 'package:provider/provider.dart';
+import '../../viewModel/auth_provider.dart';
 
-import '../../utils/global_widget.dart';
+class SignInScreen extends StatelessWidget {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
 
-class SignInScreen extends StatefulWidget {
-  const SignInScreen({super.key});
+  SignInScreen({super.key});
 
-  @override
-  State<SignInScreen> createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  bool _obscurePassword = true;
   @override
   Widget build(BuildContext context) {
-       return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      body: SafeArea(
-        child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Card(
-              elevation: 5,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
+    final authProvider = Provider.of<AuthProvider>(context);
+
+    return SafeArea(
+      child: Scaffold(
+          backgroundColor: Colors.grey[100],
+          body: Center(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
+                    SizedBox(height: 20),
                     Text(
-                      'Create Account',
+                      'Welcome Back!',
                       style: TextStyle(
-                        fontSize: 26,
+                        fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.blueAccent,
+                        color: Colors.blue,
                       ),
                     ),
-                    const SizedBox(height: 25),
+                    SizedBox(height: 8),
+                    Text(
+                      'Login to continue',
+                      style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                    ),
+                    SizedBox(height: 30),
 
-
-                    const SizedBox(height: 15),
-                    GlobalWidget.buildTextField(
-                      controller: _emailController,
-                      label: 'Email',
-                      hint: 'Enter your email',
-                      icon: Icons.email,
+                    TextField(
+                      controller: emailController,
                       keyboardType: TextInputType.emailAddress,
-                    ),
-
-                    const SizedBox(height: 15),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
                       decoration: InputDecoration(
-                        labelText: 'Password',
-                        hintText: 'Enter your password',
-                        prefixIcon: Icon(Icons.lock),
-                        suffixIcon: IconButton(
-                          icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-                          onPressed: () {
-                            setState(() {
-                              _obscurePassword = !_obscurePassword;
-                            });
-                          },
+                        prefixIcon: Icon(Icons.email),
+                        labelText: 'Email',
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       ),
                     ),
+                    SizedBox(height: 20),
 
-                    const SizedBox(height: 25),
-                    SizedBox(
+                    TextField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        prefixIcon: Icon(Icons.lock),
+                        labelText: 'Password',
+                        filled: true,
+                        fillColor: Colors.white,
+                        contentPadding: EdgeInsets.symmetric(vertical: 16),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 30),
+
+                    authProvider.isLoading
+                        ? CircularProgressIndicator()
+                        : SizedBox(
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
+                          authProvider.signInUser(
+                            emailController.text.trim(),
+                            passwordController.text.trim(),
+                            context,
+                          );
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.blueAccent,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          backgroundColor: Colors.blue,
+                          padding: EdgeInsets.symmetric(vertical: 16),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
-                        child: const Text(
-                          'Sign Up',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                        child: Text(
+                          "Login",
+                          style: TextStyle(fontSize: 16, color: Colors.white),
                         ),
                       ),
+                    ),
+
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don't have an account?"),
+                        TextButton(
+                          onPressed: () =>
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignupScreen(),)),
+                          child: Text("Sign up"),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-            ),
+              ),
           ),
-        ),
-      ),
     );
-    ;
-  }
+    }
 }
