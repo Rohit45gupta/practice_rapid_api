@@ -43,6 +43,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(height: 10),
+
             Text(
               "Splash Screen",
               style: TextStyle(
